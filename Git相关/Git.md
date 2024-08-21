@@ -196,6 +196,8 @@ git remote
 git push [-f] [–set-upstream] [远端名称 [本地分支名][:远端分支名] ]
 ```
 
+git push 括号中的都可以不用写
+
 > -f 表强覆盖性
 >
 > –set-upstream 推送到远端的同时并且建立起和远端分支的关联关系。
