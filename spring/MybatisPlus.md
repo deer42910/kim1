@@ -102,3 +102,13 @@ where条件以外的部分，不是常规的值，只能去拼接  像案例中�
 ![image-20240825221202834](D:\a_briup_learn\spring\MybatisPlus.assets\image-20240825221202834.png)
 
 ![image-20240825223001485](D:\a_briup_learn\spring\MybatisPlus.assets\image-20240825223001485.png)
+
+**Iservice的批量新增**
+
+![image-20240826151907371](D:\a_briup_learn\spring\MybatisPlus.assets\image-20240826151907371.png)
+
+**关于idea自动生成代码**
+
+DB(database数据库)**静态工具**
+
+添加与修改不需要.class通过反射获取属性..所以不需要传class类

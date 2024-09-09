@@ -18,6 +18,6 @@ idea 右侧 Maven 就是项目构建 里面的Maven命令
 >
 > 发布....                             这些就是软件的生命周期
 
-![image-20240817091622557](D:\briup_study\笔记文档\Akimm\Maven是一个管理和构建Java项目的工具.assets\image-20240817091622557.png)
+![image-20240817091622557](D:\a_briup_learn\JavaWeb\Maven是一个管理和构建Java项目的工具.assets\image-20240817091622557.png)
 
 > 这些的执行就是靠它们的插件
