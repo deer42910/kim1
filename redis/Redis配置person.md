@@ -63,3 +63,6 @@ redis-cli [options] [commonds]
 systemctl stop firewalld.service
 ```
 
+![image-20240910131753291](D:\a_briup_learn\redis\Redis配置person.assets\image-20240910131753291.png)
+
+**注意：一定要管防火墙**
