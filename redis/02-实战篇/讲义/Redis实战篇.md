@@ -553,6 +553,8 @@ public Result queryShopById(@PathVariable("id") Long id) {
 
 ![1653322506393](.\Redis实战篇.assets\1653322506393.png)
 
+高一致性就是：数据不会变化的很快，比如详情信息 
+
 #### 2.3.1 、数据库缓存不一致解决方案：
 
 
