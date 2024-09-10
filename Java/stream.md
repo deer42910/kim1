@@ -4,6 +4,60 @@ Java8引入的
 
 结合了Lambda表达式，简化集合、数组的操作
 
+**其他转换流**
+
+```java
+        //值
+        Stream<String> a = Stream.of("a", "b", "c");
+        //数组
+        String[] arr = {"q","b","c"};
+        Stream<String> stream1 = Arrays.stream(arr);
+        Stream<String> stream2 = Stream.of(arr);
+        
+        //集合  只要是Collection类型的集合，都可以调用stream()方法，将集合转换为Stream对象
+        //就是单列集合 多列结合像map看下面
+        ArrayList<String> list = new ArrayList<>();
+        Collections.addAll(list,"a","b","c");
+        Stream<String> stream = list.stream();
+```
+
+**基本类型**
+
+```
+IntStream
+LongStream
+DoubleStream
+虽然可以指定泛型Stream<Integer>、Stream<Long>、Stream<Double>
+但在数据量较大的时候，自动拆箱/装箱会比较消耗性能。
+```
+
+```java
+IntStream stream1 = IntStream.of(new int[]{1, 2, 3});
+//[1,3)
+IntStream stream2 = IntStream.range(1, 3);
+//闭 [1,3]
+IntStream stream3 = IntStream.rangeClosed(1, 3);
+```
+
+**流转其他**
+
+```java
+Stream<String> stream = Stream.of("hello", "world", "hello world");
+        //数组
+        //String[] array = stream.toArray(String[]::new);  //数组  String类型的构造函数 参数和返回值类型保持一致
+
+        //集合
+        //List<String> list1 = stream.collect(Collectors.toList());
+        //List<String> list2 = stream.collect(Collectors.toCollection(ArrayList::new));
+        //Set<String> set3 = stream.collect(Collectors.toSet());
+        //Set<String> set4 = stream.collect(Collectors.toCollection(HashSet::new));
+        //注意多次使用一个Stream对象会抛错：IllegalStateException: stream has already been operated upon or closed
+
+        //字符串
+        String result = stream.collect(Collectors.joining("-"));
+        System.out.println(result);//hello-world-hello world
+```
+
 **使用步骤**
 
 1. 先得到stream流（流水线），并把数据传上去
