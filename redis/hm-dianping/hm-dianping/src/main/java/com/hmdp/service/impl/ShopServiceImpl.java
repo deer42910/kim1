@@ -9,6 +9,7 @@ import com.hmdp.entity.Shop;
 import com.hmdp.mapper.ShopMapper;
 import com.hmdp.service.IShopService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hmdp.utils.CacheClient;
 import com.hmdp.utils.RedisConstants;
 import com.hmdp.utils.RedisData;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -38,14 +39,26 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
+    @Resource
+    private CacheClient cacheClient;
+
     @Override
     public Result queryByid(Long id) {
-        //缓存穿透
+
+        //解决缓存穿透-工具类
+        //Shop shop = cacheClient.queryWithPassThrough(CACHE_SHOP_KEY, id, Shop.class, this::getById, CACHE_SHOP_TTL, TimeUnit.MINUTES);//id2->getById(id2)==this::getById
+
+        // 缓存穿透
         //Shop shop = queryWithPassThrough(id);
+
+
+        //逻辑过期解决缓冲击穿-工具类
+        Shop shop = cacheClient.queryWithLogicalExpire(CACHE_SHOP_KEY, id, Shop.class, this::getById, CACHE_SHOP_TTL, TimeUnit.MINUTES);
+
         //互斥锁解决缓存击穿
         //Shop shop = queryWithMutex(id);
         //逻辑过期解决缓存击穿
-        Shop shop = queryWithLogicalExpire(id);
+        //Shop shop = queryWithLogicalExpire(id);
         if (shop == null) {
             Result.fail("店铺不存在！");
         }
@@ -54,14 +67,14 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
     }
 
     //重建一个线程池
-    private static final ExecutorService CACHE_REBUILD_EXECUTOR = Executors.newFixedThreadPool(10);
+    /*private static final ExecutorService CACHE_REBUILD_EXECUTOR = Executors.newFixedThreadPool(10);*/
 
     /**
      * 逻辑过期解决缓存击穿
      * @param id
      * @return
      */
-    public Shop queryWithLogicalExpire(Long id){
+    /*public Shop queryWithLogicalExpire(Long id){
         //1.从redis查询缓存  完全可以使用hash 我们这里使用String
         String key = CACHE_SHOP_KEY+id;
         String shopJson = stringRedisTemplate.opsForValue().get(key);
@@ -103,13 +116,13 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         }
         //6.4返回过期的的店铺信息
         return shop;
-    }
+    }*/
     /**
      * 缓存击穿获取锁  try catch快捷键 选中 ctrl+alt+t
      * @param id
      * @return
      */
-    public Shop queryWithMutex(Long id){
+    /*public Shop queryWithMutex(Long id){
         //1.从redis查询缓存  完全可以使用hash 我们这里使用String
         String key = CACHE_SHOP_KEY+id;
         String shopJson = stringRedisTemplate.opsForValue().get(key);
@@ -155,7 +168,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
 
         //8.返回用户信息
         return shop;
-    }
+    }*/
     /**
      * 将 缓存穿透代码 封装，防止以后找不到
      * @param id
@@ -194,21 +207,24 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
      * @param key
      * @return
      */
-    private boolean tryLock(String key){
+    /*private boolean tryLock(String key){
         //setIfAbsent()若不存在则设置为一，存在不设置  与redis中setnx对应 setnx string 1
         Boolean flag = stringRedisTemplate.opsForValue().setIfAbsent(key, "1", CACHE_SHOP_TTL, TimeUnit.MINUTES);
         return BooleanUtil.isTrue(flag);  //判断是否为true，处理null，->false
-    }
+    }*/
 
     /**
      * 释放锁(删除key)
      * @param key
      */
-    private void unlock(String key){
+    /*private void unlock(String key){
         stringRedisTemplate.delete(key);
-    }
+    }*/
 
-    public void saveShop2Redis(Long id,Long expireSeconds){
+    /**
+     * 保存redisData数据
+     */
+    /*public void saveShop2Redis(Long id,Long expireSeconds){
         //1.查询店铺数据
         Shop shop = getById(id);
         //2.封装逻辑过期时间
@@ -217,7 +233,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         redisData.setExpireTime(LocalDateTime.now().plusSeconds(expireSeconds));//设置过期时间，当前时间 plusSeconds在当前的日期和时间上加上指定的秒数
         //3.写入redis
         stringRedisTemplate.opsForValue().set(CACHE_SHOP_KEY+id,JSONUtil.toJsonStr(redisData));
-    }
+    }*/
     @Override
     @Transactional //通过事务控制原子性
     public Result update(Shop shop) {
