@@ -3,7 +3,9 @@ package com.hmdp;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
+@EnableAspectJAutoProxy(exposeProxy = true)  //默认不暴露代理对象，设置为true暴露
 @MapperScan("com.hmdp.mapper")
 @SpringBootApplication
 public class HmDianPingApplication {
