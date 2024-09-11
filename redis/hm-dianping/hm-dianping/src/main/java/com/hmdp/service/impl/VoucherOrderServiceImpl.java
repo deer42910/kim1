@@ -55,8 +55,16 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
             return Result.fail("库存不足！");
         }
         //4.充足 扣减库存
-        boolean success = seckillVoucherService.update().setSql("stock = stock -1")
-                .eq("voucher_id", voucherId).update();
+        /*第一种
+        boolean success = seckillVoucherService.update().setSql("stock = stock -1") //set stock = stock-1
+                .eq("voucher_id", voucherId)
+                .eq("stock",voucher.getStock()).update();//where id = ? and stock =？
+        乐观锁解决超卖问题：只要我扣减库存时的库存和我查询到的库存一致，就意味这没有人修改过库存，安全
+        * 但：会有很多失败的情况，原因是：在使用乐观锁的过程中 假设100个线程同时拿到100个库存，大家一起扣减，但100人中只有1人扣减成功
+        * */
+        /*第二种方式，直接将库存大于0的 -1*/
+        boolean success = seckillVoucherService.update().setSql("stock = stock -1").eq("voucher_id", voucherId)
+                .gt("stock", 0).update();//where id = ? and stock>0
         if(!success){
             //扣减库存
             return Result.fail("库存不足！");
