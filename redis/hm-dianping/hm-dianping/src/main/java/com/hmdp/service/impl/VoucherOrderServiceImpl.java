@@ -9,9 +9,11 @@ import com.hmdp.service.ISeckillVoucherService;
 import com.hmdp.service.IVoucherOrderService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hmdp.utils.RedisIdWorker;
+import com.hmdp.utils.SimpleRedisLock;
 import com.hmdp.utils.UserHolder;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,8 +34,11 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
 
     @Resource
     private ISeckillVoucherService seckillVoucherService;
-    @Autowired
+    @Resource
     private RedisIdWorker redisIdWorker;
+
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 实现秒杀下单
@@ -61,11 +66,32 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         //扩大锁的范围 在方法中的话，所释放，其他线程进来，但是订单还没被提交 所以我们写在方法的外面
         //先获取锁 - 创建订单 - 提交订单 -释放锁
         Long userId = UserHolder.getUser().getId();
-        synchronized (userId.toString().intern()) {
+        /*synchronized (userId.toString().intern()) {
             //获取代理对象（事务）
             IVoucherOrderService proxy = (IVoucherOrderService) AopContext.currentProxy();
             return proxy.createVoucherOrder(voucherId);
+        }*/
+
+        //分布式锁  使不同服务器之间即时更新
+        //创建锁对象
+        SimpleRedisLock lock = new SimpleRedisLock("order:" + userId, stringRedisTemplate);
+        //获取锁
+        boolean isLock = lock.tryLock(10);
+        //判断是否获取锁成功
+        if(!isLock){
+            //获取锁失败 返回错误或重试
+            return Result.fail("不允许重复下单");
         }
+        try {
+            //获取代理对象（事务）
+            IVoucherOrderService proxy = (IVoucherOrderService) AopContext.currentProxy();
+            return proxy.createVoucherOrder(voucherId);
+        } finally {
+            //释放锁  异常也释放
+            lock.unlock();
+        }
+
+
         /*//1.1用户id
         Long userId = UserHolder.getUser().getId();
         int count = query().eq("user_id", userId).eq("voucher_id", voucherId).count();
