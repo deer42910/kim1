@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 
 /**
  * <p>
- *  前端控制器
+ *  优惠券
  * </p>
  *
  * @author 虎哥

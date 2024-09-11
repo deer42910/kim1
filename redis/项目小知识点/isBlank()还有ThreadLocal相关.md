@@ -22,7 +22,7 @@ isblank()Java11引入的string类方法，用于检查一个字符串是否空�
 
 CharSequence是java中的一个接口，表示一系列字符，常见包括：String、StringBuilder和StringBuffer。这个接口运行统一操作这些不同类型的字符系列，如：获取字符、获取长度等
 
-trim()方法
+trim()方法 
 
 ```
 trim()方法是Java中String类的一部分，用于去除字符串两端的空白字符，包括空格、制表符和换行符。不影响其他字符
@@ -44,7 +44,7 @@ if(str!=null && str.isBlank()){
 }
 ```
 
-**ThreadLocal** java中的一个类，用于创建线程的局部变量
+**ThreadLocal** java中的一个**类**，用于创建线程的局部变量
 
 校验登录中，获取到用户信息，然后就用户保存到ThreadLocal中线程之间数据不会相互干扰。
 
