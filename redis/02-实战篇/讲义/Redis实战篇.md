@@ -1171,7 +1171,7 @@ public class RedisIdWorker {
 
 知识小贴士：关于countdownlatch
 
-countdownlatch名为信号枪：主要的作用是同步协调在多线程的等待于唤醒问题
+countdownlatch名为信号枪：主要的作用是同步协调在多线程的等待与唤醒问题
 
 我们如果没有CountDownLatch ，那么由于程序是异步的，当异步程序没有执行完时，主线程就已经执行完了，然后我们期望的是分线程全部走完之后，主线程再走，所以我们此时需要使用到CountDownLatch
 
@@ -1403,7 +1403,9 @@ boolean success = seckillVoucherService.update()
 ```java
 boolean success = seckillVoucherService.update()
             .setSql("stock= stock -1")
-            .eq("voucher_id", voucherId).update().gt("stock",0); //where id = ? and stock > 0
+            .eq("voucher_id", voucherId)
+            .gt("stock",0).update(); 
+//where id = ? and stock > 0
 ```
 
 **知识小扩展：**

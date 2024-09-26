@@ -832,7 +832,7 @@ OK
 
 ```java
 127.0.0.1:6379> HGETALL heima:user:4
-1) "name"
+1) "name"  
 2) "LiLei"
 3) "age"
 4) "20"
@@ -847,9 +847,9 @@ OK
 1) "name"
 2) "age"
 3) "sex"
-127.0.0.1:6379> HVALS heima:user:4
+127.0.0.1:6379> HVALS heima:user:4   
 1) "LiLei"
-2) "20"
+2) "20"    
 3) "man"
 ```
 
@@ -858,27 +858,20 @@ OK
 ```java
 127.0.0.1:6379> HINCRBY  heima:user:4 age 2
 (integer) 22
-127.0.0.1:6379> HVALS heima:user:4
+127.0.0.1:6379> HVALS heima:user:4       就是  hincrby  20+2
 1) "LiLei"
 2) "22"
 3) "man"
-127.0.0.1:6379> HINCRBY  heima:user:4 age -2
+127.0.0.1:6379> HINCRBY  heima:user:4 age -2     就是20-2
 (integer) 20
 ```
 
-* HSETNX
+* HSETNX(hsetnx)
 
 ```java
-127.0.0.1:6379> HSETNX heima:user4 sex woman
-(integer) 1
-127.0.0.1:6379> HGETALL heima:user:3
-1) "name"
-2) "Lucy"
-3) "age"
-4) "17"
 127.0.0.1:6379> HSETNX heima:user:3 sex woman
 (integer) 1
-127.0.0.1:6379> HGETALL heima:user:3
+127.0.0.1:6379> HGETALL heima:user:3     
 1) "name"
 2) "Lucy"
 3) "age"
@@ -902,11 +895,11 @@ Redis中的List类型与Java中的LinkedList类似，可以看做是一个双向
 
 **List的常见命令有：**
 
-- LPUSH key element ... ：向列表左侧插入一个或多个元素
-- LPOP key：移除并返回列表左侧的第一个元素，没有则返回nil
-- RPUSH key element ... ：向列表右侧插入一个或多个元素
-- RPOP key：移除并返回列表右侧的第一个元素
-- LRANGE key star end：返回一段角标范围内的所有元素
+- LPUSH key element ... ：向列表左侧插入一个或多个元素                     lpush
+- LPOP key：移除并返回列表左侧的第一个元素，没有则返回nil             lpop
+- RPUSH key element ... ：向列表右侧插入一个或多个元素                    rpush
+- RPOP key：移除并返回列表右侧的第一个元素                                     
+- LRANGE key star end：返回一段角标范围内的所有元素                          lrange
 - BLPOP和BRPOP：与LPOP和RPOP类似，只不过在没有元素时等待指定时间，而不是直接返回nil
 
 ![1652943604992](.\Redis.assets\1652943604992.png)

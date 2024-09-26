@@ -66,3 +66,16 @@ systemctl stop firewalld.service
 ![image-20240910131753291](D:\a_briup_learn\redis\Redis配置person.assets\image-20240910131753291.png)
 
 **注意：一定要管防火墙**
+
+```
+
+#查看防火墙状态
+systemctl status firewalld
+ 
+#临时关闭防火墙
+systemctl stop firewalld
+ 
+#永久关闭防火墙
+systemctl disable firewalld
+```
+

@@ -34,9 +34,10 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //1.获取请求头中的token
-        String token = request.getHeader("token");
-        if(StrUtil.isBlank(token)){  //判断null和""空字符串
+        //1.获取请求头中的token 并判断token是否存在
+        String token = request.getHeader("authorization");
+        if(StrUtil.isBlank(token)){
+            //token不存在，说明当前用户没登陆，不需要刷新直接放行
             return true;
         }
         //2.基于token获取redis中的用户
@@ -44,6 +45,7 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
         Map<Object, Object> userMap = stringRedisTemplate.opsForHash().entries(key);
         //3.判断用户是否存在
         if (userMap.isEmpty()){
+            //用户不存在，说明当前用户未登录，不需要刷新直接放行
             return true;
         }
         //5.查询到的hash数据转为UserDTO

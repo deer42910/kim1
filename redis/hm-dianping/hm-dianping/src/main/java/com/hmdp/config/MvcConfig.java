@@ -18,6 +18,8 @@ import javax.annotation.Resource;
 public class MvcConfig implements WebMvcConfigurer {
 
 
+    //new出来的对象是无法直接注入IOC容器的（LoginInterceptor是直接new出来的）
+    //所以这里需要再配置类中注入，然后通过构造器传入当前类中
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 
@@ -34,8 +36,8 @@ public class MvcConfig implements WebMvcConfigurer {
                         "/user/login"
                 ).order(1);
         //token刷新的拦截器
-        /*registry
+        registry
                 .addInterceptor(new RefreshTokenInterceptor(stringRedisTemplate))
-                .addPathPatterns("/**").order(0);*/
+                .addPathPatterns("/**").order(0);
     }
 }

@@ -1,0 +1,14 @@
+#统一端口号：使前端准确查找
+server:
+  port: 8080
+hm:
+  jwt:
+    location: classpath:hmall.jks
+    alias: hmall
+    password: hmall123
+    tokenTTL: 30m
+  auth:
+    excludePaths:
+      - /search/**
+      - /users/login
+      - /items/**

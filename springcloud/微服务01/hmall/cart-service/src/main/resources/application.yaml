@@ -1,0 +1,24 @@
+server:
+  port: 8092
+  tomcat:
+    threads:
+      max: 50  #最大线程数量
+    accept-count: 25  #允许等待的数量
+    max-connections: 100 #最大连接数量    tomcat的配置方便测试
+feign:
+  okhttp:
+    enabled: true   #开启OkHttp连接池支持
+  sentinel:
+    enabled: true
+hm:
+  db:
+    database: hm-cart
+  swagger:
+    title: "黑马商场购物车服务接口文档"
+    package: com.hmall.cart.controller
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8090  #sentinel的控制台地址
+      http-method-specify: true #是否设置请求资源方式作为资源名称

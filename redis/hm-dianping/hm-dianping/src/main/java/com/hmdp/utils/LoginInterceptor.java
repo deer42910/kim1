@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginInterceptor implements HandlerInterceptor {
 
     /*因为LoginInterceptor是手动创建的，使用构造器获得对象
-    * 拦截器加个@Component注解也可以*/
+    * 也可用@构造器 final修饰*/
     /*private StringRedisTemplate stringRedisTemplate;
     public LoginInterceptor(StringRedisTemplate stringRedisTemplate) {
         this.stringRedisTemplate = stringRedisTemplate;
@@ -41,7 +41,6 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
         //移除用户
         UserHolder.removeUser();
     }

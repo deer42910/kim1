@@ -1,15 +1,13 @@
 package com.hmdp;
 
 import com.hmdp.utils.RedisIdWorker;
-import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @SpringBootTest
-class HmDianPingApplicationTests {
+public class HmDianPingApplicationTests {
 
     private RedisIdWorker redisIdWorker;
 

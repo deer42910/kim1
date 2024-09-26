@@ -30,7 +30,7 @@ public class CacheClient {
         this.stringRedisTemplate = stringRedisTemplate;
     }
 
-    //正常设置过期时间
+    //正常设置过期时间   将任意value转换为JSON格式
     public void set(String key, Object value, Long time, TimeUnit unit){
         stringRedisTemplate.opsForValue().set(key, JSONUtil.toJsonStr(value),time,unit);
     }

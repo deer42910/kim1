@@ -40,7 +40,9 @@ public class Blog implements Serializable {
      * 用户id
      */
     private Long userId;
-    /**
+
+    /*
+     * @TableField(exist = false) 表示这三个字段不属于"tb_blog"这个表
      * 用户图标
      */
     @TableField(exist = false)

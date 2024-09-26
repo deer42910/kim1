@@ -12,6 +12,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
+/**
+ * 上传接口 TODO：学习云存储图片
+ */
 @Slf4j
 @RestController
 @RequestMapping("upload")
